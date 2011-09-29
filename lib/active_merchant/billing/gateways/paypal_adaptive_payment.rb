@@ -24,7 +24,7 @@ module ActiveMerchant #:nodoc:
       self.display_name = 'Paypal Adaptive Payments'
       
       attr_accessor :config_path
-      @config_path = "#{RAILS_ROOT}/config/paypal.yml"
+      @config_path = "#{Rails.root}/config/paypal.yml"
       
       def initialize(options = {})
         @config = {}
