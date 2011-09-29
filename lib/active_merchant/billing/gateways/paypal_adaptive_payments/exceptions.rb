@@ -1,6 +1,6 @@
 class ConfigDoesNotExist < StandardError; end;
 
-class AttributenotFound < StandardError; end;
+class AttributeNotFound < StandardError; end;
 
 class PaypalAdaptivePaymentsApiError < StandardError
   

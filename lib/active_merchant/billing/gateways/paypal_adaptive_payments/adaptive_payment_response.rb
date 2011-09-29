@@ -12,7 +12,6 @@ module ActiveMerchant
         attr_reader :paykey, :preapprovalkey
         
         def initialize json
-          
           @paykey = json['payKey']
           @preapprovalkey = json['preapprovalKey']
           @params = json
@@ -34,13 +33,13 @@ module ActiveMerchant
           begin
             @params[name.to_s]
           rescue
-            raise AttributenotFound
+            raise AttributeNotFound
           end
         end
                   
         def [](key)
           return @params[key] if @params.include? key
-          raise AttributenotFound
+          raise AttributeNotFound
         end
 
         def status

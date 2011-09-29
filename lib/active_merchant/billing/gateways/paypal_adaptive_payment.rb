@@ -28,11 +28,8 @@ module ActiveMerchant #:nodoc:
       
       def initialize(options = {})
         @config = {}
-        if options.empty?
-          load_config
-        else
-          @config.merge! options
-        end
+        return and load_config if options.empty?
+        @config.merge! options
       end 
       
       def pay(options)
