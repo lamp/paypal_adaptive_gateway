@@ -7,8 +7,6 @@ module ActiveMerchant
         return 0.01 if amount < 0.01
         ("%.2f" % amount).to_f
       end
-      
     end
-    
   end 
 end

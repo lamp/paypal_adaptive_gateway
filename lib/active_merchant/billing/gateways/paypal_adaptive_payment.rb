@@ -257,7 +257,8 @@ module ActiveMerchant #:nodoc:
       
       def parse json
         @raw = json
-        resp = JSON.parse json
+        parser = Yajl::Parser.new
+        resp = parser.parse json
         if resp['responseEnvelope']['ack'] == 'Failure'
           error = AdaptivePaypalErrorResponse.new(resp)
           raise PaypalAdaptivePaymentsApiError.new(error)

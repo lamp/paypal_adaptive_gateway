@@ -11,9 +11,7 @@ Requirements:
 
 to install
 
-    git clone git://github.com/lamp/paypal_adaptive_gateway.git
-    cd /path/to/paypal_adaptive_gateway
-    ./script/install /path/to/active/merchant
+  ``gem install paypal-adaptive-gateway``
   
 to use
 
