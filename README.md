@@ -1,22 +1,22 @@
 Paypal Adaptive Payments Library for ActiveMerchant
-
+===================================================
 Supports payments, preapprovals, refunds and currency conversions
+-----------------------------------------------------------------
+##Requirements:
 
-Requirements:
+  * Rails (usage without rails is untested)
+  * yajl-ruby
+  * Builder
+  * ActiveMerchant
 
-  .Rails (usage without rails is untested)
-  .Json
-  .Builder
-  .ActiveMerchant 1.5.x
+##to install
 
-to install
-
-  ``gem install paypal-adaptive-gateway``
+  ```gem install paypal-adaptive-gateway```
   
-to use
+##to use
 
   in application_controller.rb
-  
+  ```
     def gateway
       @gateway ||= PaypalAdaptivePaymentGateway.new(
        :login => 'your_email',
@@ -25,9 +25,9 @@ to use
        :appid => 'your_app_id'
       )
     end
-  
+  ```
   in the payment process
-  
+  ```
     #for chained payments
     def checkout
       recipients = [{:email => 'receiver_email',
@@ -45,7 +45,7 @@ to use
       )
       redirect_to response.redirect_url_for
     end
-    
+  ```
     set the :primary flag to false for each recipient for a split payment
     
   to debug
