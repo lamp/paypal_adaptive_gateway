@@ -4,7 +4,7 @@ Supports payments, preapprovals, refunds and currency conversions
 
 Requirements:
 
-  .Rails 2.3.x
+  .Rails (usage without rails is untested)
   .Json
   .Builder
   .ActiveMerchant 1.5.x

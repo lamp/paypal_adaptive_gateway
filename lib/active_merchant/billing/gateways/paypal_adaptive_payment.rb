@@ -23,7 +23,7 @@ module ActiveMerchant #:nodoc:
       # The name of the gateway
       self.display_name = 'Paypal Adaptive Payments'
       
-      attr_accessor :config_path
+      attr_accessor :config_path, :xml
       @config_path = "#{Rails.root}/config/paypal.yml"
       
       def initialize(options = {})
@@ -87,38 +87,71 @@ module ActiveMerchant #:nodoc:
       end
       
       def build_adaptive_payment_pay_request opts
-        @xml = ''
-        xml = Builder::XmlMarkup.new :target => @xml, :indent => 2
-        xml.instruct!
-        xml.PayRequest do |x|
-          x.requestEnvelope do |x|
-            x.detailLevel 'ReturnAll'
-            x.errorLanguage opts[:error_language] ||= 'en_US'
-          end
-          x.actionType opts[:pay_primary] ? 'PAY_PRIMARY' : 'PAY'
-          x.cancelUrl opts[:cancel_url]
-          x.returnUrl opts[:return_url]
-          if opts[:notify_url]
-            x.ipnNotificationUrl opts[:notify_url]
-          end
-          x.trackingId opts[:tracking_id] if opts[:tracking_id]
-          x.memo opts[:memo] if opts[:memo]
-          x.pin opts[:pin] if opts[:pin]
-          x.currencyCode opts[:currency_code] ||= 'USD'
-          x.senderEmail opts[:senders_email] if opts[:senders_email]
-          x.receiverList do |x|
-            opts[:receiver_list].each do |receiver|
-              x.receiver do |x|
-                x.email receiver[:email]
-                x.amount currency_to_two_places(receiver[:amount])
-                x.primary receiver[:primary] if receiver[:primary]
-                x.paymentType receiver[:payment_type] ||= 'GOODS'
-                x.invoiceId receiver[:invoice_id] if receiver[:invoice_id]
+        with_defaults do
+          action 'PayRequest' do |x|
+            x.actionType opts[:pay_primary] ? 'PAY_PRIMARY' : 'PAY'
+            x.cancelUrl opts[:cancel_url]
+            x.returnUrl opts[:return_url]
+            if opts[:notify_url]
+              x.ipnNotificationUrl opts[:notify_url]
+            end
+            x.trackingId opts[:tracking_id] if opts[:tracking_id]
+            x.memo opts[:memo] if opts[:memo]
+            x.pin opts[:pin] if opts[:pin]
+            x.currencyCode opts[:currency_code] ||= 'USD'
+            x.senderEmail opts[:senders_email] if opts[:senders_email]
+            x.receiverList do |x|
+              opts[:receiver_list].each do |receiver|
+                x.receiver do |x|
+                  x.email receiver[:email]
+                  x.amount currency_to_two_places(receiver[:amount])
+                  x.primary receiver[:primary] if receiver[:primary]
+                  x.paymentType receiver[:payment_type] ||= 'GOODS'
+                  x.invoiceId receiver[:invoice_id] if receiver[:invoice_id]
+                end
               end
             end
+            x.feesPayer opts[:fees_payer] ||= 'EACHRECEIVER'
           end
-          x.feesPayer opts[:fees_payer] ||= 'EACHRECEIVER'
         end
+        
+        #@builder.PayRequest do |x|
+          
+        #end
+        
+        
+        #@xml = ''
+        #xml = Builder::XmlMarkup.new :target => @xml, :indent => 2
+        #xml.instruct!
+        #xml.PayRequest do |x|
+        #  x.requestEnvelope do |x|
+        #    x.detailLevel 'ReturnAll'
+        #    x.errorLanguage opts[:error_language] ||= 'en_US'
+        #  end
+        #  x.actionType opts[:pay_primary] ? 'PAY_PRIMARY' : 'PAY'
+        #  x.cancelUrl opts[:cancel_url]
+        #  x.returnUrl opts[:return_url]
+        #  if opts[:notify_url]
+        #    x.ipnNotificationUrl opts[:notify_url]
+        #  end
+        #  x.trackingId opts[:tracking_id] if opts[:tracking_id]
+        #  x.memo opts[:memo] if opts[:memo]
+        #  x.pin opts[:pin] if opts[:pin]
+        #  x.currencyCode opts[:currency_code] ||= 'USD'
+        #  x.senderEmail opts[:senders_email] if opts[:senders_email]
+        #  x.receiverList do |x|
+        #    opts[:receiver_list].each do |receiver|
+        #      x.receiver do |x|
+        #        x.email receiver[:email]
+        #        x.amount currency_to_two_places(receiver[:amount])
+        #        x.primary receiver[:primary] if receiver[:primary]
+        #        x.paymentType receiver[:payment_type] ||= 'GOODS'
+        #        x.invoiceId receiver[:invoice_id] if receiver[:invoice_id]
+        #      end
+        #    end
+        #  end
+        #  x.feesPayer opts[:fees_payer] ||= 'EACHRECEIVER'
+        #end
       end
 
       def build_adaptive_payment_execute_request opts
@@ -252,6 +285,27 @@ module ActiveMerchant #:nodoc:
               x.currency currency
             end
           end
+        end
+      end
+      
+      # sets up basic defaults for the request
+      # yields to provide
+      #
+      #
+      def with_defaults
+        @xml = ''
+        @builder = Builder::XmlMarkup.new :target => @xml, :indent => 2
+        @builder.instruct!
+        yield
+      end
+      
+      def action act
+        @builder.send act.to_sym do |x|
+          x.requestEnvelope do |x|
+            x.detailLevel 'ReturnAll'
+            x.errorLanguage opts[:error_language] ||= 'en_US'
+          end
+          x = yield x
         end
       end
       
