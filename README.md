@@ -1,7 +1,8 @@
 Paypal Adaptive Payments Library for ActiveMerchant
 ===================================================
-Supports payments, preapprovals, refunds and currency conversions
------------------------------------------------------------------
+
+##Supports payments, preapprovals, refunds and currency conversions
+
 ##Requirements:
 
   * Rails (usage without rails is untested)
@@ -16,7 +17,7 @@ Supports payments, preapprovals, refunds and currency conversions
 ##to use
 
   in application_controller.rb
-  ```
+  ```ruby
     def gateway
       @gateway ||= PaypalAdaptivePaymentGateway.new(
        :login => 'your_email',
@@ -27,7 +28,7 @@ Supports payments, preapprovals, refunds and currency conversions
     end
   ```
   in the payment process
-  ```
+  ```ruby
     #for chained payments
     def checkout
       recipients = [{:email => 'receiver_email',
