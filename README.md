@@ -16,7 +16,9 @@ Paypal Adaptive Payments Library for ActiveMerchant
   
 ##to use
 
-  ###in application_controller.rb
+  in application_controller.rb
+  ----------------------------
+  
   ```ruby
     def gateway
       @gateway ||= PaypalAdaptivePaymentGateway.new(
