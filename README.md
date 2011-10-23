@@ -29,8 +29,9 @@ Paypal Adaptive Payments Library for ActiveMerchant
       )
     end
   ```
-  ###in the payment process
-  * for chained payments
+  
+  ##in the payment process for chained payments
+  
   ```ruby
     
     def checkout
@@ -50,6 +51,7 @@ Paypal Adaptive Payments Library for ActiveMerchant
       redirect_to response.redirect_url_for
     end
   ```
+  
     set the :primary flag to false for each recipient for a split payment
     
   to debug
