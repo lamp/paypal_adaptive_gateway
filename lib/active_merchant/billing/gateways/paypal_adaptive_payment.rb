@@ -1,8 +1,8 @@
-dir = File.dirname(__FILE__)
-require dir + '/paypal_adaptive_payments/exceptions.rb'
-require dir + '/paypal_adaptive_payments/adaptive_payment_response.rb'
-require dir + '/paypal_adaptive_payments/utils.rb'
-require dir + '/paypal_adaptive_payments/version.rb'
+#dir = File.dirname(__FILE__)
+#require dir + '/paypal_adaptive_payments/exceptions.rb'
+#require dir + '/paypal_adaptive_payments/adaptive_payment_response.rb'
+#require dir + '/paypal_adaptive_payments/utils.rb'
+#require dir + '/paypal_adaptive_payments/version.rb'
 
 module ActiveMerchant #:nodoc:
   module Billing #:nodoc:
@@ -28,7 +28,10 @@ module ActiveMerchant #:nodoc:
       
       def initialize(options = {})
         @config = {}
-        return and load_config if options.empty?
+        if options.empty?
+          load_config
+          return
+        end
         @config.merge! options
       end 
       
@@ -88,7 +91,7 @@ module ActiveMerchant #:nodoc:
       
       def build_adaptive_payment_pay_request opts
         with_defaults do
-          action 'PayRequest' do |x|
+          action 'PayRequest', opts do |x|
             x.actionType opts[:pay_primary] ? 'PAY_PRIMARY' : 'PAY'
             x.cancelUrl opts[:cancel_url]
             x.returnUrl opts[:return_url]
@@ -299,7 +302,7 @@ module ActiveMerchant #:nodoc:
         yield
       end
       
-      def action act
+      def action act, opts
         @builder.send act.to_sym do |x|
           x.requestEnvelope do |x|
             x.detailLevel 'ReturnAll'

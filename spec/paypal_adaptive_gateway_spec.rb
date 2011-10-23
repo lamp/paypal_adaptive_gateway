@@ -1,16 +1,9 @@
 require 'spec_helper.rb'
 
-describe ActiveMerchant::Billing::PaypalAdaptiveGateway do
+describe ActiveMerchant::Billing::PaypalAdaptivePaymentGateway do
   
   before :all do
-    Rails.env = 'test'
-    config = {
-      :login => 'foo',
-      :password => 'asdsad',
-      :appid => 'dasdsa',
-      :signature => "sdafdsf"
-    }
-    @gateway = ActiveMerchant::Billing::PaypalAdaptiveGateway.new config
+    @gateway = ActiveMerchant::Billing::PaypalAdaptivePaymentGateway.new $config
   end
 
   describe 'making payments' do
@@ -20,11 +13,13 @@ describe ActiveMerchant::Billing::PaypalAdaptiveGateway do
     end
 
     it "should pay" do
-      @gateway.pay :reciever_list => [{:email => 'foo@bar.com', :amount => 5,}],
+      response = @gateway.pay :receiver_list => [{:email => 'foo@bar.com', :amount => 5,}],
                    :fees_payer => 'PRIMARYRECEIVER',
                    :return_url => 'http://foo.com',
                    :cancel_url => 'http://foo.com',
                    :notify_url => 'http://foo.com'
+                   
+      response.status.should == ''
     end
 
   end
