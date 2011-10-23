@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "paypal-adaptive-gateway"
-  s.version = "0.0.1"
+  s.version = "0.1.4"
   s.summary = "ActiveMerchant plugin for Paypal Adaptive Payments"
   s.authors = ["lamp"]
   s.require_paths << ["lib"]

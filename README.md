@@ -30,7 +30,7 @@ Paypal Adaptive Payments Library for ActiveMerchant
     end
   ```
   
-  ##in the payment process for chained payments
+  in the payment process for chained payments
   
   ```ruby
     

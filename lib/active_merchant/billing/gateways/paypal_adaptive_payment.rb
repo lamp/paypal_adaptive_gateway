@@ -91,7 +91,7 @@ module ActiveMerchant #:nodoc:
       
       def build_adaptive_payment_pay_request opts
         with_defaults do
-          action 'PayRequest', opts do |x|
+          action "PayRequest", opts do |x|
             x.actionType opts[:pay_primary] ? 'PAY_PRIMARY' : 'PAY'
             x.cancelUrl opts[:cancel_url]
             x.returnUrl opts[:return_url]
@@ -117,11 +117,6 @@ module ActiveMerchant #:nodoc:
             x.feesPayer opts[:fees_payer] ||= 'EACHRECEIVER'
           end
         end
-        
-        #@builder.PayRequest do |x|
-          
-        #end
-        
         
         #@xml = ''
         #xml = Builder::XmlMarkup.new :target => @xml, :indent => 2
@@ -158,29 +153,39 @@ module ActiveMerchant #:nodoc:
       end
 
       def build_adaptive_payment_execute_request opts
-        @xml = ''
-        xml = Builder::XmlMarkup.new :target => @xml, :indent => 2
-        xml.instruct!
-        xml.ExecutePaymentRequest do |x|          
-          x.requestEnvelope do |x|
-            x.detailLevel 'ReturnAll'
-            x.errorLanguage opts[:error_language] ||= 'en_US'
+        with_defaults do
+          action "ExecutePaymentRequest", opts do |x|
+            x.payKey opts[:paykey]  
           end
-          x.payKey opts[:paykey]
         end
+        #@xml = ''
+        #xml = Builder::XmlMarkup.new :target => @xml, :indent => 2
+        #xml.instruct!
+        #xml.ExecutePaymentRequest do |x|          
+        #  x.requestEnvelope do |x|
+        #    x.detailLevel 'ReturnAll'
+        #    x.errorLanguage opts[:error_language] ||= 'en_US'
+        #  end
+        #  x.payKey opts[:paykey]
+        #end
       end
       
       def build_adaptive_payment_details_request opts
-        @xml = ''
-        xml = Builder::XmlMarkup.new :target => @xml, :indent => 2
-        xml.instruct!
-        xml.PayRequest do |x|          
-          x.requestEnvelope do |x|
-            x.detailLevel 'ReturnAll'
-            x.errorLanguage opts[:error_language] ||= 'en_US'
+        with_defaults do
+          action "PaymentDetailsRequest", opts do |x|
+            x.payKey opts[:paykey]  
           end
-          x.payKey opts[:paykey]
         end
+        #@xml = ''
+        #xml = Builder::XmlMarkup.new :target => @xml, :indent => 2
+        #xml.instruct!
+        #xml.PayRequest do |x|          
+        #  x.requestEnvelope do |x|
+        #    x.detailLevel 'ReturnAll'
+        #    x.errorLanguage opts[:error_language] ||= 'en_US'
+        #  end
+        #  x.payKey opts[:paykey]
+        #end
       end
       
       def build_adaptive_refund_details options
@@ -291,10 +296,7 @@ module ActiveMerchant #:nodoc:
         end
       end
       
-      # sets up basic defaults for the request
-      # yields to provide
-      #
-      #
+      # sets up basic defaults for the request to avoid repetition
       def with_defaults
         @xml = ''
         @builder = Builder::XmlMarkup.new :target => @xml, :indent => 2
@@ -302,6 +304,7 @@ module ActiveMerchant #:nodoc:
         yield
       end
       
+      #builds the basic structure inside of which the rest of the request will be built
       def action act, opts
         @builder.send act.to_sym do |x|
           x.requestEnvelope do |x|
