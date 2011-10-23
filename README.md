@@ -16,7 +16,7 @@ Paypal Adaptive Payments Library for ActiveMerchant
   
 ##to use
 
-  in application_controller.rb
+  ###in application_controller.rb
   ```ruby
     def gateway
       @gateway ||= PaypalAdaptivePaymentGateway.new(
@@ -27,9 +27,10 @@ Paypal Adaptive Payments Library for ActiveMerchant
       )
     end
   ```
-  in the payment process
+  ###in the payment process
+  * for chained payments
   ```ruby
-    #for chained payments
+    
     def checkout
       recipients = [{:email => 'receiver_email',
                      :amount => some_amount,
