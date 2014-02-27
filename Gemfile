@@ -1,7 +1,10 @@
-source :rubygems
-gem "rack-cache", '~> 1.0.3'
-gem "rails", "~> 3.1"
+source "https://rubygems.org"
+
 gem "activemerchant"
-gem "yajl-ruby"
+gem "yajl-ruby", '1.2.0'
 gem "builder"
-gem "rspec"
+
+group :test do
+  gem "rspec", '2.14.1'
+  gem 'fakeweb', '~> 1.3'
+end
