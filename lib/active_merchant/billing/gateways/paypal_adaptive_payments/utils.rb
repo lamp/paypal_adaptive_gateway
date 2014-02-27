@@ -1,7 +1,7 @@
 module ActiveMerchant
   module Billing
     
-    module AdaptiveUtils
+    module Utils
       
       def currency_to_two_places amount
         return 0.01 if amount < 0.01

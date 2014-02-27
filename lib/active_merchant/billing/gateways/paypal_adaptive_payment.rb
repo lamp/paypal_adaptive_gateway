@@ -9,7 +9,7 @@ module ActiveMerchant #:nodoc:
     class PaypalAdaptivePaymentGateway < Gateway # :nodoc:
       
       include AdaptivePaymentResponses
-      include AdaptiveUtils
+      include Utils
       
       TEST_URL = 'https://svcs.sandbox.paypal.com/AdaptivePayments/'
       LIVE_URL = 'https://svcs.paypal.com/AdaptivePayments/'
@@ -24,7 +24,7 @@ module ActiveMerchant #:nodoc:
       self.display_name = 'Paypal Adaptive Payments'
       
       attr_accessor :config_path, :xml
-      @config_path = "#{Rails.root}/config/paypal.yml"
+      @config_path = "#{Dir.getwd}/config/paypal.yml"
       
       def initialize(options = {})
         @config = {}
